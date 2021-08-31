@@ -8,15 +8,16 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if (isset($_POST['code']) AND isset($_POST['designation'])) {
+    if (isset($_POST['designation']) AND isset($_POST['date_peremption']) AND isset($_POST['categorie'])) {
 
         //Recupération de l'historique de sortie d'un produit dans la base
 
-        $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') AS date_vente FROM historique WHERE (code = ? AND designation = ?)") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') AS date_vente FROM historique WHERE designation = ? AND date_peremption = ? AND categorie = ?") or die(print_r($bdd->errorInfo()));
         $req->execute(
             array(
-                $_POST['code'],
-                $_POST['designation']
+                $_POST['designation'],
+                $_POST['date_peremption'],
+                $_POST['categorie']
             )
         );
 

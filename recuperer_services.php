@@ -10,8 +10,15 @@
         die('Erreur : ' . $e->getMessage());
     
     }
-    $req = $bdd->query("SELECT * FROM services ORDER BY designation") or die(print_r($bdd->errorInfo()));
-    $data = $req->fetchAll();
-    
-    echo json_encode($data);
+    if (isset($_GET['urgence'])) {
+        $req = $bdd->query("SELECT * FROM services_urgences ORDER BY designation") or die(print_r($bdd->errorInfo()));
+        $data = $req->fetchAll();
+        
+        echo json_encode($data);
+    } else {
+        $req = $bdd->query("SELECT * FROM services ORDER BY designation") or die(print_r($bdd->errorInfo()));
+        $data = $req->fetchAll();
+        
+        echo json_encode($data);
+    }
 ?>
