@@ -8,16 +8,14 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if (isset($_POST['designation']) AND isset($_POST['date_peremption']) AND isset($_POST['categorie'])) {
+    if (isset($_POST['id_prod'])) {
 
-        //Recupération de l'historique de sortie d'un produit dans la base
+        // Récupération de l'historique de sortie d'un produit
 
-        $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') AS date_vente FROM historique WHERE designation = ? AND date_peremption = ? AND categorie = ?") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') AS date_vente FROM historique WHERE id_prod = ? ORDER BY id DESC") or die(print_r($bdd->errorInfo()));
         $req->execute(
             array(
-                $_POST['designation'],
-                $_POST['date_peremption'],
-                $_POST['categorie']
+                $_POST['id_prod']
             )
         );
 
@@ -40,8 +38,8 @@
 
         echo json_encode($data);
     } else {
-        // Récupération des produits pour l'historique
-        $req = $bdd->query("SELECT * FROM approvisionnement") or die(print_r($bdd->errorInfo()));
+        // Récupération des produits pour l'inventaire
+        $req = $bdd->query("SELECT *, DATE_FORMAT(date_approv, '%d/%m/%Y %Hh%imin%ss') as date_approv FROM medicaments ORDER BY en_stock") or die(print_r($bdd->errorInfo()));
         $data = $req->fetchAll();
         
         echo json_encode($data);

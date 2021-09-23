@@ -10,7 +10,7 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    $req = $bdd->query("SELECT id, nom_user FROM utilisateurs_caisse") or die(print_r($bdd->errorInfo()));
+    $req = $bdd->query("SELECT id, nom_user, rol FROM utilisateurs_caisse") or die(print_r($bdd->errorInfo()));
 
     $data = $req->fetchAll();
 

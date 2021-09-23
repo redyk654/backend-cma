@@ -19,7 +19,7 @@
         }
     } else {
 
-        $req = $bdd->query("SELECT * FROM medicaments") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->query("SELECT * FROM medicaments ORDER BY id") or die(print_r($bdd->errorInfo()));
         $data = $req->fetchAll();
         
         echo json_encode($data);

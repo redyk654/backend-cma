@@ -25,12 +25,13 @@
                 'reste_a_payer' => $_POST['reste_a_payer'],
             )
         );
-    } else if (isset($_POST['id']) AND isset($_POST['montant_verse']) AND isset($_POST['reste_a_payer']) AND isset($_POST['relicat'])) {
+    } else if (isset($_POST['id']) AND isset($_POST['montant_verse']) AND isset($_POST['reste_a_payer']) AND isset($_POST['relicat']) AND isset($_POST['caissier'])) {
 
         // Règlement d'une facture non réglé
-        $req = $bdd->prepare("UPDATE facture_pharmacie SET montant_verse = ?, reste_a_payer = ?, relicat = ?  WHERE id = ?");
+        $req = $bdd->prepare("UPDATE facture_pharmacie SET caissier = ?, montant_verse = ?, reste_a_payer = ?, relicat = ?  WHERE id = ?");
         $req->execute(
             array(
+                $_POST['caissier'],
                 $_POST['montant_verse'],
                 $_POST['reste_a_payer'],
                 $_POST['relicat'],
@@ -87,7 +88,7 @@
             }
 
         } else {
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie ORDER BY id_fac DESC");
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE reste_a_payer = 0 ORDER BY id_fac DESC");
             $req->execute();
     
             $data = $req->fetchAll();
