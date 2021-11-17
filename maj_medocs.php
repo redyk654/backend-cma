@@ -26,7 +26,7 @@
         $req2->execute(
             array(
                 $nv_stock,
-                $_POST['id_produit']
+                $_POST['id_produit'],
             )
         );
     } elseif (isset($_POST['produit'])) {
