@@ -12,14 +12,14 @@
 
     if(isset($_GET['stock'])) {
         if($_GET['stock'] == 'filtre') {
-            $req = $bdd->query("SELECT * FROM medicaments ORDER BY en_stock") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->query("SELECT * FROM medicaments ORDER BY designation") or die(print_r($bdd->errorInfo()));
             $data = $req->fetchAll();
             
             echo json_encode($data);
         }
     } else {
 
-        $req = $bdd->query("SELECT * FROM medicaments ORDER BY id") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->query("SELECT * FROM medicaments ORDER BY designation") or die(print_r($bdd->errorInfo()));
         $data = $req->fetchAll();
         
         echo json_encode($data);

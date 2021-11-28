@@ -39,7 +39,7 @@
         echo json_encode($data);
     } else {
         // Récupération des produits pour l'inventaire
-        $req = $bdd->query("SELECT *, DATE_FORMAT(date_approv, '%d/%m/%Y %Hh%imin%ss') as date_approv FROM medicaments ORDER BY en_stock") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->query("SELECT *, DATE_FORMAT(date_approv, '%d/%m/%Y %Hh%imin%ss') as date_approv FROM medicaments ORDER BY designation") or die(print_r($bdd->errorInfo()));
         $data = $req->fetchAll();
         
         echo json_encode($data);

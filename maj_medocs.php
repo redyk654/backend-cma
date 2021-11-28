@@ -8,46 +8,66 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if(isset($_POST['id_produit']) AND isset($_POST['qte'])) {
+    if(isset($_POST['produit'])) {
         // Mise à jour des stocks des médicaments vendus
+        $produit = json_decode($_POST['produit'], true);
 
         $req = $bdd->prepare("SELECT en_stock FROM medicaments WHERE id = ?");
         $req->execute(
             array(
-                $_POST['id_produit'],
+                $produit['id_prod'],
             )
         );
 
         $data = $req->fetch();
-        $nv_stock = $data['en_stock'] - $_POST['qte'];
+        $nv_stock = $data['en_stock'] - $produit['quantite'];
 
         $req2 = $bdd->prepare("UPDATE medicaments SET en_stock = ? WHERE id = ?");
 
         $req2->execute(
             array(
                 $nv_stock,
-                $_POST['id_produit'],
+                $produit['id_prod'],
             )
         );
-    } elseif (isset($_POST['produit'])) {
-        $produit = json_decode($_POST['produit'], true);
         
-        $req = $bdd->prepare("INSERT INTO 
-                medicaments(id, code, designation, categorie, pu_vente, pu_achat, conditionnement, en_stock, min_rec, date_peremption, date_approv)
-                VALUES('', :code, :designation, :categorie, :pu_vente, :pu_achat, :conditionnement, :en_stock, :min_rec, :date_peremption, NOW())");
-        
-        $req->execute(
+        // Mise à jour de la fiche de stock
+        $remarque = "sortie";
+        $pu_vente = $produit['prix_total'] / $produit['quantite'];
+        $req3 = $bdd->prepare("INSERT INTO fiche_stock(id, designation, pu_vente, par, qte_sortie, qte_dispo, date_heure, remarque) VALUES(:id, :designation, :pu_vente, :par, :qte_sortie, :qte_dispo, NOW(), :remarque)");
+
+        $req3->execute(
             array(
-                'code' => $produit['code'],
+                'id' => $produit['id_prod'],
                 'designation' => $produit['designation'],
-                'categorie' => $produit['categorie'],
-                'pu_vente' => $produit['pu_vente'],
-                'pu_achat' => $produit['pu_achat'],
-                'conditionnement' => $produit['conditionnement'],
-                'en_stock' => $produit['stock_ajoute'],
-                'min_rec' => $produit['min_rec'],
-                'date_peremption' => $produit['date_peremption']
+                'pu_vente' => $pu_vente,
+                'par' => $produit['nom_vendeur'],
+                'qte_sortie' => $produit['quantite'],
+                'qte_dispo' => $nv_stock,
+                'remarque' => $remarque,
             )
         );
+
     }
+    // elseif (isset($_POST['produit'])) {
+    //     $produit = json_decode($_POST['produit'], true);
+        
+    //     $req = $bdd->prepare("INSERT INTO 
+    //             medicaments(id, code, designation, categorie, pu_vente, pu_achat, conditionnement, en_stock, min_rec, date_peremption, date_approv)
+    //             VALUES('', :code, :designation, :categorie, :pu_vente, :pu_achat, :conditionnement, :en_stock, :min_rec, :date_peremption, NOW())");
+        
+    //     $req->execute(
+    //         array(
+    //             'code' => $produit['code'],
+    //             'designation' => $produit['designation'],
+    //             'categorie' => $produit['categorie'],
+    //             'pu_vente' => $produit['pu_vente'],
+    //             'pu_achat' => $produit['pu_achat'],
+    //             'conditionnement' => $produit['conditionnement'],
+    //             'en_stock' => $produit['stock_ajoute'],
+    //             'min_rec' => $produit['min_rec'],
+    //             'date_peremption' => $produit['date_peremption']
+    //         )
+    //     );
+    // }
 ?>

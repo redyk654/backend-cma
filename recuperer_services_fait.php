@@ -10,14 +10,15 @@
 
     //Recupération de l'historique des services de la caisse
 
-    if(isset($_GET['date'])) {
+    if(isset($_GET['dateD']) AND isset($_GET['dateF'])) {
 
-        if (isset($_GET['recette']) && isset($_GET['date'])) {
-            $req = $bdd->prepare("SELECT SUM(prix) AS recette FROM historique_services WHERE date_fait = ?") or die(print_r($bdd->errorInfo()));
+        if (isset($_GET['recette'])) {
+            $req = $bdd->prepare("SELECT SUM(prix) AS recette FROM historique_services WHERE date_heure BETWEEN ? AND ?") or die(print_r($bdd->errorInfo()));
         
             $req->execute(
                 array(
-                    $_GET['date']
+                    $_GET['dateD'],
+                    $_GET['dateF']
                 )
             );
         
@@ -26,11 +27,12 @@
             echo json_encode($data);
         } else {
 
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_fait, '%d/%m/%Y') AS date_fait, DATE_FORMAT(heure_fait, '%Hh%imin%ss') AS heure_fait FROM historique_services WHERE date_fait = ? ORDER BY id DESC") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_fait, '%d/%m/%Y') AS date_fait, DATE_FORMAT(heure_fait, '%Hh%imin%ss') AS heure_fait FROM historique_services WHERE date_heure BETWEEN ? AND ? ORDER BY id DESC") or die(print_r($bdd->errorInfo()));
         
             $req->execute(
                 array(
-                    $_GET['date']
+                    $_GET['dateD'],
+                    $_GET['dateF']
                 )
             );
         

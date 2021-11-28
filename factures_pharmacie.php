@@ -32,7 +32,7 @@
     } else if (isset($_POST['id']) AND isset($_POST['montant_verse']) AND isset($_POST['reste_a_payer']) AND isset($_POST['relicat']) AND isset($_POST['caissier'])) {
 
         // Règlement d'une facture non réglé
-        $req = $bdd->prepare("UPDATE facture_pharmacie SET caissier = ?, montant_verse = ?, reste_a_payer = ?, relicat = ?  WHERE id = ?");
+        $req = $bdd->prepare("UPDATE facture_pharmacie SET caissier = ?, montant_verse = ?, reste_a_payer = ?, relicat = ? WHERE id = ?");
         $req->execute(
             array(
                 $_POST['caissier'],
