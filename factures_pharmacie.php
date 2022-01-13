@@ -90,11 +90,13 @@
                 $filtr = 0;
                 $statu = "pending";
                 $typ = 100;
-                $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE (reste_a_payer > ? OR caissier != ?)  ORDER BY id_fac DESC");
+
+                $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE (reste_a_payer > ? OR (caissier != ? AND type_assurance = ?))  ORDER BY id_fac DESC");
                 $req->execute(
                     array(
                         $filtr,
-                        $_GET['caissier'],  
+                        $_GET['caissier'],
+                        $typ,
                     )
                 );
         

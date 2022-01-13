@@ -6,16 +6,18 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    $date1 = '2021-11-15 07:28:44';
-    $date2 = '2021-11-15 15:28:44';
+    $date1 = 344;
+    $date2 = 344;
+    $a = 48;
 
-    $req = $bdd->prepare("SELECT SUM(prix) AS prix, COUNT(prix) AS nb, designation FROM historique_services WHERE date_heure BETWEEN ? AND ? GROUP BY designation");
+    $req = $bdd->prepare("UPDATE medicaments SET pu_vente = ((SELECT pu_vente FROM medicaments WHERE id = ?) + ?) WHERE id = ?");
 
     $req->execute(
         array(
             $date1,
+            $a,
             $date2,
-        )     
+        )
     );
 
     $data = $req->fetchAll();
