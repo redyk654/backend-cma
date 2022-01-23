@@ -14,8 +14,8 @@
 
         if ($_GET['moment'] == "nuit") {
 
-            $debut = $_POST['dateD'] . ' 12:00:00';
-            $fin = $_POST['dateF'] . ' 15:00:00';
+            $debut = $_POST['dateD'] . ' 14:00:00';
+            $fin = $_POST['dateF'] . ' 11:00:00';
             
             $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, designation FROM historique_services
                                     WHERE caissier = :caissier AND (date_heure BETWEEN :precedent AND :actuel) GROUP BY designation') or die(print_r($bdd->errorInfo()));

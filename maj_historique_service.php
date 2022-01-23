@@ -11,8 +11,8 @@
     // Mise à jour de l'historique des services
     if(isset($_POST['designation']) AND isset($_POST['prix_total']) AND isset($_POST['caissier']) AND isset($_POST['id_facture']) AND isset($_POST['patient']) AND isset($_POST['reduction'])) {
         $req = $bdd->prepare("INSERT INTO 
-                historique_services(id_facture, designation, prix, categorie, reduction, caissier, date_fait, heure_fait, patient, date_heure)
-                VALUES(?, ?, ?, ?, ?, ?, CURRENT_DATE() , CURRENT_TIME(), ?, NOW())
+                historique_services(id_facture, designation, prix, categorie, reduction, frais, caissier, date_fait, heure_fait, patient, date_heure)
+                VALUES(?, ?, ?, ?, ?, ?, ?, CURRENT_DATE() , CURRENT_TIME(), ?, NOW())
                 ") or die(print_r($bdd->errorInfo()));
         $req->execute(
             array( 
@@ -21,8 +21,9 @@
                 $_POST['prix_total'],
                 $_POST['catego'],
                 $_POST['reduction'],
+                $_POST['frais'],
                 $_POST['caissier'],
-                $_POST['patient']
+                $_POST['patient'],
             )
         );
     } else {

@@ -19,34 +19,37 @@
             )
         );
 
-        $data = $req->fetch();
-        $nv_stock = $data['en_stock'] - $produit['quantite'];
+        if($data['en_stock'] > 0) {
 
-        $req2 = $bdd->prepare("UPDATE medicaments SET en_stock = ? WHERE id = ?");
-
-        $req2->execute(
-            array(
-                $nv_stock,
-                $produit['id_prod'],
-            )
-        );
-        
-        // Mise à jour de la fiche de stock
-        $remarque = "sortie";
-        $pu_vente = $produit['prix_total'] / $produit['quantite'];
-        $req3 = $bdd->prepare("INSERT INTO fiche_stock(id, designation, pu_vente, par, qte_sortie, qte_dispo, date_heure, remarque) VALUES(:id, :designation, :pu_vente, :par, :qte_sortie, :qte_dispo, NOW(), :remarque)");
-
-        $req3->execute(
-            array(
-                'id' => $produit['id_prod'],
-                'designation' => $produit['designation'],
-                'pu_vente' => $pu_vente,
-                'par' => $produit['nom_vendeur'],
-                'qte_sortie' => $produit['quantite'],
-                'qte_dispo' => $nv_stock,
-                'remarque' => $remarque,
-            )
-        );
+            $data = $req->fetch();
+            $nv_stock = $data['en_stock'] - $produit['quantite'];
+    
+            $req2 = $bdd->prepare("UPDATE medicaments SET en_stock = ? WHERE id = ?");
+    
+            $req2->execute(
+                array(
+                    $nv_stock,
+                    $produit['id_prod'],
+                )
+            );
+            
+            // Mise à jour de la fiche de stock
+            $remarque = "sortie";
+            $pu_vente = $produit['prix_total'] / $produit['quantite'];
+            $req3 = $bdd->prepare("INSERT INTO fiche_stock(id, designation, pu_vente, par, qte_sortie, qte_dispo, date_heure, remarque) VALUES(:id, :designation, :pu_vente, :par, :qte_sortie, :qte_dispo, NOW(), :remarque)");
+    
+            $req3->execute(
+                array(
+                    'id' => $produit['id_prod'],
+                    'designation' => $produit['designation'],
+                    'pu_vente' => $pu_vente,
+                    'par' => $produit['nom_vendeur'],
+                    'qte_sortie' => $produit['quantite'],
+                    'qte_dispo' => $nv_stock,
+                    'remarque' => $remarque,
+                )
+            );
+        }
 
     }
     // elseif (isset($_POST['produit'])) {

@@ -6,21 +6,21 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    $date1 = 344;
-    $date2 = 344;
-    $a = 48;
+    $a = 'caisse';
 
-    $req = $bdd->prepare("UPDATE medicaments SET pu_vente = ((SELECT pu_vente FROM medicaments WHERE id = ?) + ?) WHERE id = ?");
+    $req = $bdd->prepare("UPDATE utilisateurs SET rol = ?");
 
     $req->execute(
         array(
-            $date1,
             $a,
-            $date2,
         )
     );
 
-    $data = $req->fetchAll();
+    $req2 = $bdd->prepare("UPDATE utilisateurs_caisse SET rol = ?");
 
-    echo json_encode($data);
+    $req2->execute(
+        array(
+            $a,
+        )
+    );
 ?>
