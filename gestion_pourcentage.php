@@ -11,6 +11,7 @@
     }
 
     if (isset($_POST['caissier']) AND isset($_POST['dateD']) AND isset($_POST['dateF'])) {
+
         if (isset($_GET['details'])) {
             $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, COUNT(designation) AS nb, designation, categorie FROM historique_services
             WHERE caissier = :caissier AND (date_heure BETWEEN :precedent AND :actuel) GROUP BY designation') or die(print_r($bdd->errorInfo()));
@@ -19,6 +20,17 @@
                 'caissier' => $_POST['caissier'],
                 'precedent' => $_POST['dateD'],
                 'actuel' => $_POST['dateF'],
+                )
+            );
+        } else if (isset($_GET['frais'])) {
+
+            $req = $bdd->prepare('SELECT SUM(frais) as frais FROM facture_caisse
+            WHERE caissier = :caissier AND (date_heure BETWEEN :precedent AND :actuel)') or die(print_r($bdd->errorInfo()));
+            $req->execute(
+                array(
+                    'caissier' => $_POST['caissier'],
+                    'precedent' => $_POST['dateD'],
+                    'actuel' => $_POST['dateF'],
                 )
             );
         } else {

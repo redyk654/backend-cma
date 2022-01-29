@@ -22,5 +22,5 @@
     );
     
     $data = $req->fetchAll();
-    echo json_encode($data);
+    echo 1==1;
 ?>

@@ -10,7 +10,7 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if (isset($_POST['dateD']) AND isset($_POST['dateF']) AND $_POST['caissier'] AND isset($_GET['moment'])) {
+    if (isset($_POST['dateD']) AND isset($_POST['dateF']) AND isset($_POST['caissier']) AND isset($_GET['moment'])) {
 
         if ($_GET['moment'] == "nuit") {
 

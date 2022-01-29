@@ -10,13 +10,14 @@
 
     // Recupération des client assurés
     if(isset($_POST['date_min']) AND isset($_POST['date_max']) AND isset($_POST['assurance']) AND isset($_GET['categorie'])) {
-        if ($_GET['categorie'] == 'service') {
+        if ($_GET['categorie'] == 'pharmacie') {
+
             $date_min = $_POST['date_min'].' 00:00:00';
             $date_max = $_POST['date_max'].' 23:59:59';
             $statu = 'pending';
     
-            $req = $bdd->prepare("SELECT id_fac, id, patient, prix_total, assurance, type_assurance FROM
-                    facture_caisse WHERE statu = :statu AND assurance = :assurance AND (date_heure BETWEEN :date_min AND :date_max)") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT id_fac, id, patient, prix_total, assurance, type_assurance, date_heure FROM
+                    facture_pharmacie WHERE statu = :statu AND assurance = :assurance AND (date_heure BETWEEN :date_min AND :date_max) ORDER BY date_heure") or die(print_r($bdd->errorInfo()));
             $req->execute(
                 array(
                     'statu' => $statu,
@@ -25,13 +26,13 @@
                     'date_max' => $date_max,
                 )
             );
-        } else if ($_GET['categorie'] == 'pharmacie') {
+        } else {
             $date_min = $_POST['date_min'].' 00:00:00';
             $date_max = $_POST['date_max'].' 23:59:59';
             $statu = 'pending';
     
-            $req = $bdd->prepare("SELECT id_fac, id, patient, prix_total, assurance, type_assurance FROM
-                    facture_pharmacie WHERE statu = :statu AND assurance = :assurance AND (date_heure BETWEEN :date_min AND :date_max)") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT id_fac, id, patient, prix_total, frais, assurance, type_assurance, date_heure FROM
+                    facture_caisse WHERE statu = :statu AND assurance = :assurance AND (date_heure BETWEEN :date_min AND :date_max) ORDER BY date_heure") or die(print_r($bdd->errorInfo()));
             $req->execute(
                 array(
                     'statu' => $statu,
@@ -56,8 +57,8 @@
         $data = $req->fetchAll();
         echo json_encode($data);
     } else if (isset($_POST['id_fac']) AND isset($_POST['categorie'])) {
-        if ($_POST['categorie'] == "service") {
-            $req = $bdd->prepare("UPDATE facture_caisse SET statu = ? WHERE id = ?");
+        if ($_POST['categorie'] == "pharmacie") {
+            $req = $bdd->prepare("UPDATE facture_pharmacie SET statu = ? WHERE id = ?");
     
             $req->execute(
                 array(
@@ -65,8 +66,9 @@
                     $_POST['id_fac'],
                 )
             );
-        } else if ($_POST['categorie'] == "pharmacie") {
-            $req = $bdd->prepare("UPDATE facture_pharmacie SET statu = ? WHERE id = ?");
+        } else {
+
+            $req = $bdd->prepare("UPDATE facture_caisse SET statu = ? WHERE id = ?");
     
             $req->execute(
                 array(

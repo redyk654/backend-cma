@@ -19,9 +19,10 @@
             )
         );
 
+        $data = $req->fetch();
+        
         if($data['en_stock'] > 0) {
 
-            $data = $req->fetch();
             $nv_stock = $data['en_stock'] - $produit['quantite'];
     
             $req2 = $bdd->prepare("UPDATE medicaments SET en_stock = ? WHERE id = ?");
