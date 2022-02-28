@@ -10,38 +10,26 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if (isset($_POST['dateD']) AND isset($_POST['dateF']) AND isset($_POST['caissier']) AND isset($_GET['moment'])) {
+    if (isset($_POST['dateD']) AND isset($_POST['dateF']) AND isset($_POST['caissier'])) {
 
-        if ($_GET['moment'] == "nuit") {
+        $assurance = 'aucune';
 
-            $debut = $_POST['dateD'] . ' 14:00:00';
-            $fin = $_POST['dateF'] . ' 11:00:00';
-            
-            $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, designation FROM historique_services
-                                    WHERE caissier = :caissier AND (date_heure BETWEEN :precedent AND :actuel) GROUP BY designation') or die(print_r($bdd->errorInfo()));
-            $req->execute(
-                array(
-                    'caissier' => $_POST['caissier'],
-                    'precedent' => $debut,
-                    'actuel' => $fin,
-                )
-            );
-
-        } else if ($_GET['moment'] == "jour") {
-
-            $debut = $_POST['dateD'] . ' 06:00:00';
-            $fin = $_POST['dateF'] . ' 20:00:00';
-
-            $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, designation FROM historique_services
-            WHERE caissier = :caissier AND (date_heure BETWEEN :actuel AND :suivant) GROUP BY designation') or die(print_r($bdd->errorInfo()));
-            $req->execute(
-                array(
-                    'caissier' => $_POST['caissier'],
-                    'actuel' => $debut,
-                    'suivant' => $fin,
-                )
-            );
+        if ($_POST['assurance'] == "non") {
+            $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, designation, id FROM historique_services
+            WHERE caissier = :caissier AND assurance = :assurance AND (date_heure BETWEEN :actuel AND :suivant) GROUP BY designation') or die(print_r($bdd->errorInfo()));
+        } else {
+            $req = $bdd->prepare('SELECT SUM(prix) AS prix_total, designation, id FROM historique_services
+            WHERE caissier = :caissier AND assurance != :assurance AND (date_heure BETWEEN :actuel AND :suivant) GROUP BY designation') or die(print_r($bdd->errorInfo()));
         }
+        
+        $req->execute(
+            array(
+                'caissier' => $_POST['caissier'],
+                'assurance' => $assurance,
+                'actuel' => $_POST['dateD'],
+                'suivant' => $_POST['dateF'],
+            )
+        );
 
         $data = $req->fetchAll();
         echo json_encode($data);

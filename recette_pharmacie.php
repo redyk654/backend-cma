@@ -14,8 +14,8 @@
 
         if ($_GET['moment'] == "nuit") {
 
-            $debut = $_POST['dateD'] . ' 11:00:00';
-            $fin = $_POST['dateF'] . ' 15:00:00';
+            $debut = $_POST['dateD'] . ' 15:00:00';
+            $fin = $_POST['dateF'] . ' 11:00:00';
             $reste = 0;
 
             $req = $bdd->prepare('SELECT SUM(prix_total) AS recette FROM facture_pharmacie
@@ -32,7 +32,7 @@
         } else if ($_GET['moment'] == "jour") {
 
             $debut = $_POST['dateD'] . ' 06:00:00';
-            $fin = $_POST['dateF'] . ' 19:00:00';
+            $fin = $_POST['dateF'] . ' 18:00:00';
             $reste = 0;
 
             $req = $bdd->prepare('SELECT SUM(prix_total) AS recette FROM facture_pharmacie
