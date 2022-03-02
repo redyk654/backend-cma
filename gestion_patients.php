@@ -23,7 +23,7 @@
     } else {
         // Récupération des patients enregistrés
 
-        $req = $bdd->query("SELECT * FROM patients ORDER BY nom");
+        $req = $bdd->query("SELECT * FROM patients ORDER BY nom LIMIT 15");
         $data = $req->fetchAll();
         
         echo json_encode(($data));
