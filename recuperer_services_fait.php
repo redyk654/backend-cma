@@ -13,7 +13,7 @@
     if(isset($_GET['dateD']) AND isset($_GET['dateF'])) {
 
         if (isset($_GET['recette'])) {
-            $req = $bdd->prepare("SELECT SUM(prix) AS recette FROM historique_services WHERE date_heure BETWEEN ? AND ?") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT SUM(a_payer) AS recette FROM facture_caisse WHERE date_heure BETWEEN ? AND ?") or die(print_r($bdd->errorInfo()));
         
             $req->execute(
                 array(
