@@ -28,7 +28,7 @@
                 )
             );
         } else {
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE patient LIKE ? AND reste_a_payer = ? ORDER BY id_fac") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE patient LIKE ? AND reste_a_payer = ? ORDER BY id_fac DESC") or die(print_r($bdd->errorInfo()));
             $req->execute(
                 array(
                     $str,

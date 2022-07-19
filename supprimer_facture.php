@@ -25,20 +25,28 @@
                 $_POST['id'],
             )
         );
+
+        $req3 = $bdd->prepare("DELETE FROM data_assurance WHERE id_facture = ?");
+
+        $req3->execute(
+            array(
+                $_POST['id'],
+            )
+        );
     } else if(isset($_GET['id'])) {
         // Pour les produits
-        $req = $bdd->prepare("DELETE FROM facture_pharmacie WHERE id = ?");
-        $req->execute(
-            array(
-                $_GET['id']
-            )
-        );
-        $req2 = $bdd->prepare("DELETE FROM historique WHERE id_facture = ?");
+        // $req = $bdd->prepare("DELETE FROM facture_pharmacie WHERE id = ?");
+        // $req->execute(
+        //     array(
+        //         $_GET['id']
+        //     )
+        // );
+        // $req2 = $bdd->prepare("DELETE FROM historique WHERE id_facture = ?");
 
-        $req2->execute(
-            array(
-                $_GET['id'],
-            )
-        );
+        // $req2->execute(
+        //     array(
+        //         $_GET['id'],
+        //     )
+        // );
     }
 ?>

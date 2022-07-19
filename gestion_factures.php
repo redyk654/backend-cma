@@ -93,7 +93,7 @@
             }
 
         } else {
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_caisse ORDER BY id_fac DESC");
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_caisse ORDER BY id_fac DESC LIMIT 18");
             $req->execute();
     
             $data = $req->fetchAll();
