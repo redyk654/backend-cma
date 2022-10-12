@@ -8,7 +8,7 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if(isset($_POST['produit'])) {
+    if(isset($_POST['produit']) AND $_POST['caissier']) {
         // Mise à jour des stocks des médicaments vendus
         $produit = json_decode($_POST['produit'], true);
 
@@ -37,7 +37,10 @@
             // Mise à jour de la fiche de stock
             $remarque = "sortie";
             $pu_vente = $produit['prix_total'] / $produit['quantite'];
-            $req3 = $bdd->prepare("INSERT INTO fiche_stock(id, designation, pu_vente, par, qte_sortie, qte_dispo, date_heure, remarque) VALUES(:id, :designation, :pu_vente, :par, :qte_sortie, :qte_dispo, NOW(), :remarque)");
+            $req3 = $bdd->prepare("INSERT INTO 
+                                    fiche_stock(id, designation, pu_vente, par, qte_sortie, qte_dispo, date_heure, remarque) 
+                                    VALUES(:id, :designation, :pu_vente, :par, :qte_sortie, :qte_dispo, NOW(), :remarque)"
+                                    );
     
             $req3->execute(
                 array(
@@ -50,6 +53,16 @@
                     'remarque' => $remarque,
                 )
             );
+
+            $req4 = $bdd->prepare("UPDATE historique SET caissier = ? WHERE id_facture = ?");
+    
+            $req4->execute(
+                array(
+                    $_POST['caissier'],
+                    $produit['id_facture'],
+                )
+            );
+            
         }
 
     }

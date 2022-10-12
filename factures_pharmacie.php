@@ -8,16 +8,16 @@
         die('Erreur : ' . $e->getMessage());
     }
 
-    if (isset($_POST['id']) AND isset($_POST['prix_total']) AND isset($_POST['a_payer']) AND isset($_POST['montant_verse']) AND isset($_POST['relicat']) AND isset($_POST['reste_a_payer']) AND isset($_POST['caissier'])) {
+    if (isset($_POST['id']) AND isset($_POST['prix_total']) AND isset($_POST['a_payer']) AND isset($_POST['montant_verse']) AND isset($_POST['relicat']) AND isset($_POST['reste_a_payer']) AND isset($_POST['vendeur'])) {
 
         // Enregistrement de la facture
-        $req = $bdd->prepare("INSERT INTO facture_pharmacie(id, caissier, patient, prix_total, a_payer, montant_verse, relicat, reste_a_payer, date_heure, assurance, type_assurance, statu) 
-        VALUES(:id, :caissier, :patient, :prix_total, :a_payer, :montant_verse, :relicat, :reste_a_payer, NOW(), :assurance, :type_assurance, :statu)");
+        $req = $bdd->prepare("INSERT INTO facture_pharmacie(id, vendeur, patient, prix_total, a_payer, montant_verse, relicat, reste_a_payer, date_heure, assurance, type_assurance, statu) 
+        VALUES(:id, :vendeur, :patient, :prix_total, :a_payer, :montant_verse, :relicat, :reste_a_payer, NOW(), :assurance, :type_assurance, :statu)");
     
         $req->execute(
             array(
                 'id' => $_POST['id'],
-                'caissier' => $_POST['caissier'],
+                'vendeur' => $_POST['vendeur'],
                 'patient' => $_POST['patient'],
                 'prix_total' => $_POST['prix_total'],
                 'a_payer' => $_POST['a_payer'],
@@ -88,15 +88,19 @@
             } else {
 
                 $filtr = 0;
+                $caissier='';
                 $statu = "pending";
                 $typ = 100;
 
-                $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE (reste_a_payer > ? OR (caissier != ? AND type_assurance = ?)) ORDER BY id_fac DESC LIMIT 20");
+                $req = $bdd->prepare("SELECT *, 
+                                        DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie
+                                        WHERE reste_a_payer > ? OR caissier = ? 
+                                        ORDER BY id_fac
+                                        DESC LIMIT 17");
                 $req->execute(
                     array(
                         $filtr,
-                        $_GET['caissier'],
-                        $typ,
+                        $caissier
                     )
                 );
         
@@ -106,8 +110,16 @@
             }
 
         } else {
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE reste_a_payer = 0 ORDER BY id_fac DESC LIMIT 20");
-            $req->execute();
+            $filtr = 0;
+            $caissier='';
+
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_heure, '%d/%m/%Y %Hh%imin%ss') as date_heure FROM facture_pharmacie WHERE reste_a_payer = ? AND caissier != ? ORDER BY id_fac DESC LIMIT 20");
+            $req->execute(
+                array(
+                    $filtr,
+                    $caissier
+                )
+            );
     
             $data = $req->fetchAll();
     

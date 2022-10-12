@@ -14,7 +14,7 @@
 
         $str = $_GET['str'] . '%';
 
-        $req = $bdd->prepare("SELECT * FROM patients WHERE nom LIKE ? ORDER BY nom") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->prepare("SELECT * FROM patients WHERE nom LIKE ? ORDER BY nom LIMIT 15") or die(print_r($bdd->errorInfo()));
         $req->execute(
             array(
                 $str
