@@ -11,14 +11,15 @@
     if (isset($_POST['id']) AND isset($_POST['prix_total']) AND isset($_POST['a_payer']) AND isset($_POST['montant_verse']) AND isset($_POST['relicat']) AND isset($_POST['reste_a_payer']) AND isset($_POST['vendeur'])) {
 
         // Enregistrement de la facture
-        $req = $bdd->prepare("INSERT INTO facture_pharmacie(id, vendeur, patient, prix_total, a_payer, montant_verse, relicat, reste_a_payer, date_heure, assurance, type_assurance, statu) 
-        VALUES(:id, :vendeur, :patient, :prix_total, :a_payer, :montant_verse, :relicat, :reste_a_payer, NOW(), :assurance, :type_assurance, :statu)");
+        $req = $bdd->prepare("INSERT INTO facture_pharmacie(id, vendeur, patient, code_patient, prix_total, a_payer, montant_verse, relicat, reste_a_payer, date_heure, assurance, type_assurance, statu) 
+        VALUES(:id, :vendeur, :patient, :code_patient, :prix_total, :a_payer, :montant_verse, :relicat, :reste_a_payer, NOW(), :assurance, :type_assurance, :statu)");
     
         $req->execute(
             array(
                 'id' => $_POST['id'],
                 'vendeur' => $_POST['vendeur'],
                 'patient' => $_POST['patient'],
+                'code_patient' => $_POST['code_patient'],
                 'prix_total' => $_POST['prix_total'],
                 'a_payer' => $_POST['a_payer'],
                 'montant_verse' => $_POST['montant_verse'],

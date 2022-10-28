@@ -11,12 +11,13 @@
     if (isset($_POST['nom_patient'])) {
         // Insertion d'un nouveau patient
 
-        $req = $bdd->prepare("INSERT INTO patients(nom, assurance, type_assurance) VALUES(?, ?, ?)") or die(print_r($bdd->errorInfo()));
+        $req = $bdd->prepare("INSERT INTO patients(code_patient, nom, assurance, type_assurance, date_creation) VALUES(?, ?, ?, ?, NOW())") or die(print_r($bdd->errorInfo()));
         $req->execute(
             array(
-                $_POST['nom_patient'], 
+                $_POST['code_patient'],
+                $_POST['nom_patient'],
                 $_POST['assurance'],
-                $_POST['type_assurance'],
+                $_POST['type_assurance'],          
             )
         );
 

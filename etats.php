@@ -35,7 +35,7 @@
             $fin = $_POST['dateF'];
             $statu = 'payé';
             
-            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') as date_heure, SUM(quantite) AS quantite, SUM(prix_total) AS prix_total FROM historique WHERE date_vente BETWEEN :precedent AND :actuel AND status_vente = :statu GROUP BY designation") or die(print_r($bdd->errorInfo()));
+            $req = $bdd->prepare("SELECT *, DATE_FORMAT(date_vente, '%d/%m/%Y %Hh%imin%ss') as date_heure, SUM(quantite) AS quantite, SUM(prix_total) AS prix_total FROM historique WHERE date_vente BETWEEN :precedent AND :actuel AND status_vente = :statu GROUP BY designation");
             $req->execute(
                 array(
                     'precedent' => $debut,
