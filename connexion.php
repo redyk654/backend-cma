@@ -12,7 +12,7 @@
     $message = null;
     if (isset($_POST['nom']) AND isset($_POST['mdp'])) {
 
-        $req = $bdd->prepare("SELECT * FROM utilisateurs WHERE nom_user = ?");
+        $req = $bdd->prepare("SELECT * FROM utilisateurs WHERE pseudo = ?");
         $req->execute(
             array(
                 $_POST['nom']

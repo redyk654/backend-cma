@@ -10,21 +10,22 @@
         die('Erreur : ' . $e->getMessage());
     }
     
-    if (isset($_POST['code_facture'])) {
+    if (isset($_GET['code_facture'])) {
         // Maj du code facture
-        $id=1;
+        $id=$_GET['id'];
         $req2 = $bdd->prepare("UPDATE code_facture_phar SET code_facture = ? WHERE id = ?");
     
         $req2->execute(
             array(
-                $_POST['code_facture'],
+                $_GET['code_facture'],
                 $id
             )
         );
-    } else {
+    } else if (isset($_GET['id'])) {
         // Récupération du code facture
-        $req = $bdd->query("SELECT id, code_facture FROM code_facture_phar") or die(print_r($bdd->errorInfo()));
-    
+        $req = $bdd->prepare("SELECT id, code_facture FROM code_facture_phar WHERE id = ?") or die(print_r($bdd->errorInfo()));
+        $req->execute([$_GET['id']]);
+
         $data = $req->fetchAll();
     
         echo json_encode($data);

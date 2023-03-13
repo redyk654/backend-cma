@@ -38,19 +38,11 @@
                 )
             );
 
-            $req3 = $bdd->prepare("UPDATE medicaments SET en_stock = ?, designation = ?, categorie = ?, genre = ?, pu_vente= ?, min_rec = ?, date_peremption = ?, conditionnement = ? WHERE id = ?");
+            $req3 = $bdd->prepare("UPDATE medicaments SET en_stock = ? WHERE id = ?");
 
             $req3->execute(
                 array(
                     $nv_stock,
-                    $produit['designation'],
-                    $produit['categorie'],
-                    $produit['genre'],
-                    $produit['pu_vente'],
-                    $produit['min_rec'],
-                    $produit['date_peremption'],
-                    $produit['conditionnement'],
-                    $produit['id'],
                 )
             );
         }
